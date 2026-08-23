@@ -1,0 +1,6 @@
+name: role_monitor
+version: 1.0.0
+description: "Mechanical role-drift monitor: tracks mutations without Critic and steps without Expert, logs drift events, exposes monitor_status tool."
+author: "user + opencode"
+hooks:
+  - post_tool_call

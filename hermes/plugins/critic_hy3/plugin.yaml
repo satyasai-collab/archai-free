@@ -1,0 +1,4 @@
+name: critic_hy3
+version: 1.0.0
+description: "Critic role tool: hard QA verdicts via hy3-free on zen. Separate channel so delegation stays on deepseek-expert."
+author: "user + opencode"

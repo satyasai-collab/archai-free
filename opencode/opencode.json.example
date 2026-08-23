@@ -1,0 +1,32 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "//": "Example config. Copy to ~/.config/opencode/opencode.json and adjust.",
+  "model": "<provider>/<executor-model>",
+  "permission": "allow",
+  "instructions": [
+    "~/.config/opencode/MEMORY.md",
+    "~/.config/opencode/EXPERT_PROTOCOL.md"
+  ],
+  "plugin": [
+    "./plugin/memory.ts",
+    "./plugin/statusbar.tsx",
+    "./plugin/expert_monitor.ts",
+    "./plugin/expert_statusbar.tsx"
+  ],
+  "provider": {
+    "judge-local": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Judge (local wrapper)",
+      "options": {
+        "baseURL": "http://127.0.0.1:8000/v1"
+      },
+      "models": {
+        "judge-expert": {
+          "name": "Judge Expert (local)",
+          "limit": { "context": 128000, "output": 16384 }
+        }
+      }
+    }
+  },
+  "agent": {}
+}

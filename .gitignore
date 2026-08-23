@@ -1,0 +1,24 @@
+# secrets / personal state — never commit
+config.yaml
+config.json
+opencode.json
+auth.json
+.env
+session/
+*.log
+*.log.*
+
+# editor / OS noise
+*~
+*.bak
+*.bak.*
+__pycache__/
+.DS_Store
+Thumbs.db
+
+# caches / local state
+*.db
+*.db-shm
+*.db-wal
+node_modules/
+.venv/
