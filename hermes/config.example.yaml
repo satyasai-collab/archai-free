@@ -1,0 +1,25 @@
+# Example Hermes config (excerpt). Merge into ~/.hermes/config.yaml.
+# Secrets (api_key) are intentionally omitted — set them via env or locally.
+
+model:
+  default: <executor-model>     # free-tier chat model
+  provider: custom
+  base_url: https://<free-tier-endpoint>/v1
+  api_mode: chat_completions
+  max_tokens: 2000              # note: reasoning models may need >=500 just for thinking
+
+fallback_providers: []
+
+delegation:
+  model: judge-expert           # local judge wrapper
+  provider: custom
+  base_url: http://127.0.0.1:8000/v1
+  inherit_mcp_toolsets: false
+  max_iterations: 50
+  child_timeout_seconds: 120
+
+plugins:
+  enabled:
+    - critic_hy3                # harsh QA critic via free model
+    - role_monitor              # drift counters + expert_drift.log
+  disabled: []
