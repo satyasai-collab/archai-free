@@ -18,25 +18,25 @@
 - **Трёхролевая схема** - `Executor` (основная модель), `Expert` (sudya s chistym
   kontekstom и nulem instrumentov), `Critic` (жёсткий QA, только чтение).
 - **HARD STOP мутаций** - любая мутация без вердикта Critic блокируется протоколом.
-- **Монитор дрейфа** - `opencode/plugin/expert_monitor.ts` so schetchikami shagov i
-  TTL-razblokirovkoy.
+- **Монитор дрейфа** - `opencode/plugin/expert_monitor.ts` со счётчиками шагов и
+  TTL-разблокировкой.
 - **Готовые конфиги** для [opencode](opencode/) и [Hermes](hermes/).
-- **DoD-верификация** - yavnoe opredelenie gotovnosti для kazhdogo shaga.
+- **DoD-верификация** - явное определение готовности для каждого шага.
 
 ## Архитектура
 
 ![Architecture](assets/architecture.svg)
 
-Potok: `Executor` poluchaet zadachu ot `User`, vyzivaet `Expert` для dekompozicii i
-verifikacii, vypolnyaet shagi, zatem `Critic` zhestko proveryaet rezultat do otveta
-polzovatelyu. Lyubaya mutaciya sistemy trebuet verdikta `Expert` и `Critic`.
+Potok: `Executor` получает задачу от `User`, вызывает `Expert` для декомпозиции i
+верификации, выполняет шаги, zatem `Critic` zhestko проверяет результат до ответа
+пользователю. Любая мутация системы требует вердикта `Expert` и `Critic`.
 
 ## Как это работает
 
 1. **Декомпозиция** - `Expert` разбивает задачу на атомарные шаги с критериями успеха.
 2. **Исполнение** - `Executor` выполняет шаг через инструменты.
 3. **Верификация шага** - `Expert` подтверждает корректность и отсутствие регресса.
-4. **Финал + Critic** - `Expert` finalnaya proverka, zatem `Critic` (QA) po 4 frontam.
+4. **Финал + Critic** - `Expert` финальная проверка, затем `Critic` (QA) po 4 frontam.
 
 ## Структура репозитория
 
