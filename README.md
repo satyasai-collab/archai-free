@@ -27,7 +27,7 @@
 
 ![Architecture](assets/architecture.svg)
 
-Potok: `Executor` получает задачу от `User`, вызывает `Expert` для декомпозиции i
+Potok: `Executor` получает задачу от `User`, вызывает `Expert` для декомпозиции и
 верификации, выполняет шаги, затем `Critic` жёстко проверяет результат до ответа
 пользователю. Любая мутация системы требует вердикта `Expert` и `Critic`.
 
@@ -70,7 +70,7 @@ cp -r opencode/ ~/.config/opencode/
 cp -r hermes/ ~/.hermes/
 ```
 
-Подробнее — в [docs/EXPERT_PROTOCOL.md](docs/EXPERT_PROTOCOL.md) i
+Подробнее — в [docs/EXPERT_PROTOCOL.md](docs/EXPERT_PROTOCOL.md) и
 [docs/HERMES_MULTI_ROLE_PROTOCOL.md](docs/HERMES_MULTI_ROLE_PROTOCOL.md).
 
 ## Лицензия
