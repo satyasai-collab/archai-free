@@ -1,64 +1,90 @@
-# ArchAI Free — multi-role agent architecture on free models
+╔══════════════════════════════════════════════════════════════════════╗
+║                ░▒▓   A R C H A I   ·   F R E E   ▓▒░                 ║
+║                                                                      ║
+║                 Мульти-рольная архитектура ИИ-агента                 ║
+║          Executor -> Expert (судья) -> Critic (жёсткий QA)           ║
+║                                                                      ║
+╚══════════════════════════════════════════════════════════════════════╝
 
-Multi-role AI agent scheme where cheap/fast **free-tier** models are split into
-three roles instead of one over-loaded generalist:
+## Роли
+
+        ┌──────────────┐
+        │   ПОЛЬЗО-    │
+        │   ВАТЕЛЬ     │
+        └──────┬───────┘
+               │  запрос
+               ▼
+     ┌──────────────────────────┐
+     │          EXECUTOR         │
+     │  Flash — основная модель  │
+     │  исполняет шаги           │
+     └──────┬───────────┬────────┘
+   шаг готов │           │ мутация
+            ▼           ▼
+   ┌──────────────┐  ┌──────────────────┐
+   │    EXPERT    │  │     CRITIC       │
+   │  судья:      │  │  жёсткий QA:     │
+   │ вериф. шага  │  │ доёбывается до   │
+   │ + финал      │  │ идеала (HARD STOP)│
+   └──────┬───────┘  └────────┬─────────┘
+         OK │                │ PASS
+            ▼                ▼
+     ┌──────────────────────────────────────┐
+     │       ОТВЕТ ПОЛЬЗОВАТЕЛЮ               │
+     └──────────────────────────────────────┘
+
+## Что делает каждая роль
+
+┌────────────────┬───────────────────────────────────────────────────┐
+│Роль            │Назначение                                         │
+├────────────────┼───────────────────────────────────────────────────┤
+│Executor        │Исполняет задачи, пишет код, сам вызывает судью    │
+│Expert          │Судья: верифицирует каждый шаг и финальный результат│
+│Critic          │Жёсткий QA: требует доказательств, HARD STOP после мутаций│
+│Monitor         │Плагин-барьер: не даёт дрейфовать без вердикта Expert│
+└────────────────┴───────────────────────────────────────────────────┘
+
+## Правило
+
+╔══════════════════════════════════════════════════════════════════════╗
+║                          ПРАВИЛО 1 ИТЕРАЦИИ                          ║
+║                                                                      ║
+║ Один шаг «понял -> ответил» -> Executor отвечает САМ.                ║
+║ Много шагов / мутация / архитектура -> ОБЯЗАТЕЛЕН Expert.            ║
+║                                                                      ║
+╚══════════════════════════════════════════════════════════════════════╝
+
+## Поток задачи
+
+1. `EXPERT CALL` - декомпозиция на атомарные шаги.
+2. Executor исполняет шаг, фиксирует stdout/stderr/exit code.
+3. `STEP N VERIFIED` - Expert проверяет каждый шаг.
+4. При мутации -> `CRITIC` (HARD STOP) до ответа пользователю.
+5. `EXPERT VERIFY` - финальная сверка перед ответом.
+
+## Структура репозитория
 
 ```
-                 ┌─────────────────┐
-   user ───────► │    Executor     │  fast free model (chat)
-                 │  does the work  │  tools: bash/edit/read/write
-                 └───┬─────────┬───┘
-       task(expert)  │         │  task(critic)
-                     ▼         ▼
-          ┌────────────┐   ┌────────────┐
-          │   Expert   │   │   Critic   │
-          │  judge,    │   │ harsh QA,  │
-          │ zero memory│   │ read-only  │
-          └────────────┘   └────────────┘
+archai-free/
+├── docs/
+│   ├── EXPERT_PROTOCOL.md            <- протокол ролей
+│   ├── HERMES_MULTI_ROLE_PROTOCOL.md <- полная схема
+│   └── AUDIT_2026-08-23.md           <- аудит 8 проблемных мест
+├── hermes/                          <- конфиги Hermes
+├── opencode/
+│   ├── agent/                       <- expert.md, critic.md
+│   └── plugin/                      <- expert_monitor.ts
+├── LICENSE                          <- MIT
+└── README.md
 ```
 
-- **Executor** — executes, never self-verifies in multi-step tasks.
-- **Expert (judge)** — same-class model with clean context and a strict auditor
-  prompt; decomposes, verifies every step, gives final verdict.
-- **Critic** — automatic hard-stop QA after any mutating task; rejects
-  half-done work.
+## Быстрый старт
 
-Two independent stacks are included:
+```bash
+git clone https://github.com/satyasai-collab/archai-free
+# вся логика ролей - в docs/EXPERT_PROTOCOL.md
+```
 
-| Stack | Path | What's inside |
-|---|---|---|
-| opencode | [`opencode/`](opencode/) | subagents (`expert`, `critic`), plugins: drift monitor, statusbars, memory |
-| Hermes | [`hermes/`](hermes/) | SOUL.md executor protocol, plugins `critic_hy3`, `role_monitor` |
+## Лицензия
 
-## Docs
-
-- [`docs/EXPERT_PROTOCOL.md`](docs/EXPERT_PROTOCOL.md) — canonical protocol:
-  phases, anti-drift counters, hard stops, output contract.
-- [`docs/HERMES_MULTI_ROLE_PROTOCOL.md`](docs/HERMES_MULTI_ROLE_PROTOCOL.md) —
-  the same role scheme adapted for the Hermes agent.
-- [`docs/AUDIT_2026-08-23.md`](docs/AUDIT_2026-08-23.md) — honest list of known
-  architectural weaknesses (read-only audit, nothing fixed yet).
-
-## Install (opencode stack)
-
-1. Copy `opencode/agent/*` to `~/.config/opencode/agent/`.
-2. Copy `opencode/plugin/*` to `~/.config/opencode/plugin/`.
-3. Register plugins and instructions in `opencode.json`
-   (see `opencode/opencode.json.example`).
-4. Restart opencode — agents and monitor are picked up at startup.
-
-## Install (Hermes stack)
-
-1. Put `hermes/SOUL.md` into the profile directory (`~/.hermes/SOUL.md`).
-2. Copy `hermes/plugins/<name>` into `~/.hermes/plugins/`.
-3. Enable: `hermes plugins enable critic_hy3 role_monitor`.
-
-## Known limitations
-
-See [`docs/AUDIT_2026-08-23.md`](docs/AUDIT_2026-08-23.md). Highlights:
-single judge channel = SPOF, free-tier flakiness, enforcement is mostly
-prompt-based. The scheme trades reliability for cost discipline.
-
-## License
-
-MIT — see [LICENSE](LICENSE).
+MIT (c) satyasai-collab. Свободно для использования и модификации.
