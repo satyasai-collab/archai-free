@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="280" viewBox="0 0 720 280" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+  <rect width="720" height="280" fill="#f8fafc"/>
+  <defs>
+    <marker id="ah" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#0369a1"/></marker>
+  </defs>
+  <rect x="24" y="100" width="170" height="90" rx="10" fill="#ffffff" stroke="#0369a1" stroke-width="2"/>
+  <text x="44" y="135" font-size="18" font-weight="700" fill="#0f172a">Executor</text>
+  <text x="44" y="158" font-size="13" fill="#475569">Исполнитель</text>
+  <text x="44" y="178" font-size="13" fill="#475569">основная модель</text>
+  <rect x="280" y="30" width="170" height="90" rx="10" fill="#ffffff" stroke="#0369a1" stroke-width="2"/>
+  <text x="300" y="65" font-size="18" font-weight="700" fill="#0f172a">Expert</text>
+  <text x="300" y="88" font-size="13" fill="#475569">Судья</text>
+  <text x="300" y="108" font-size="13" fill="#475569">чистый контекст</text>
+  <rect x="280" y="160" width="170" height="90" rx="10" fill="#ffffff" stroke="#0369a1" stroke-width="2"/>
+  <text x="300" y="195" font-size="18" font-weight="700" fill="#0f172a">Critic</text>
+  <text x="300" y="218" font-size="13" fill="#475569">Жёсткий QA</text>
+  <text x="300" y="238" font-size="13" fill="#475569">read-only</text>
+  <rect x="536" y="100" width="160" height="90" rx="10" fill="#ffffff" stroke="#0369a1" stroke-width="2"/>
+  <text x="556" y="135" font-size="18" font-weight="700" fill="#0f172a">User</text>
+  <text x="556" y="158" font-size="13" fill="#475569">Заказчик</text>
+  <text x="556" y="178" font-size="13" fill="#475569">ТЗ / фидбек</text>
+  <path d="M194,130 C240,130 240,75 280,75" fill="none" stroke="#0369a1" stroke-width="2" marker-end="url(#ah)"/>
+  <path d="M194,150 C240,150 240,205 280,205" fill="none" stroke="#0369a1" stroke-width="2" marker-end="url(#ah)"/>
+  <path d="M450,130 C500,130 500,130 536,130" fill="none" stroke="#0369a1" stroke-width="2" marker-end="url(#ah)"/>
+  <text x="196" y="68" font-size="12" fill="#64748b">запрос</text>
+  <text x="196" y="205" font-size="12" fill="#64748b">мутация</text>
+  <text x="466" y="118" font-size="12" fill="#64748b">результат</text>
+</svg>
