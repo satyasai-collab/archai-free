@@ -1,56 +1,56 @@
 # ArchAI - Free
 
-### Mnogorolevaya arhitektura II-agenta · Executor · Expert · Critic
+### Многоролевая архитектура ИИ-агента · Executor · Expert · Critic
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Visibility](https://img.shields.io/badge/visibility-public-brightgreen)](https://github.com/satyasai-collab/archai-free)
 [![Roles](https://img.shields.io/badge/roles-3-blue)](docs)
 [![Stack](https://img.shields.io/badge/stack-TS%20%7C%20Python%20%7C%20YAML-informational)](.)
 
-> Otkrytaya realizaciya zhestkogo mnogoagentnogo protokola: ispolnitel ne prinimaet
-> arhitekturnyh resheniy sam - kazhdyy shag i kazhdaya mutaciya prohodyat verifikaciyu
-> sudey (Expert) i avtomaticheskim kritikom (Critic).
+> Открытая реализация жёсткого многоагентного протокола: исполнитель не принимает
+> архитектурных решений сам — каждый шаг и каждая мутация проходят верификацию
+> судьёй (Expert) и автоматическим критиком (Critic).
 
 ---
 
-## Vozmozhnosti
+## Возможности
 
-- **Trehrolevaya schema** - `Executor` (osnovnaya model), `Expert` (sudya s chistym
-  kontekstom i nulem instrumentov), `Critic` (zhestkiy QA, read-only).
-- **HARD STOP mutaciy** - lyubaya mutaciya bez verdikta Critic blokiruetsya protokolom.
-- **Monitor dreyfa** - `opencode/plugin/expert_monitor.ts` so schetchikami shagov i
+- **Трёхролевая схема** - `Executor` (основная модель), `Expert` (sudya s chistym
+  kontekstom и nulem instrumentov), `Critic` (жёсткий QA, только чтение).
+- **HARD STOP мутаций** - любая мутация без вердикта Critic блокируется протоколом.
+- **Монитор дрейфа** - `opencode/plugin/expert_monitor.ts` so schetchikami shagov i
   TTL-razblokirovkoy.
-- **Gotovye konfigi** dlya [opencode](opencode/) i [Hermes](hermes/).
-- **DoD-verifikaciya** - yavnoe opredelenie gotovnosti dlya kazhdogo shaga.
+- **Готовые конфиги** для [opencode](opencode/) и [Hermes](hermes/).
+- **DoD-верификация** - yavnoe opredelenie gotovnosti для kazhdogo shaga.
 
-## Arhitektura
+## Архитектура
 
 ![Architecture](assets/architecture.svg)
 
-Potok: `Executor` poluchaet zadachu ot `User`, vyzivaet `Expert` dlya dekompozicii i
+Potok: `Executor` poluchaet zadachu ot `User`, vyzivaet `Expert` для dekompozicii i
 verifikacii, vypolnyaet shagi, zatem `Critic` zhestko proveryaet rezultat do otveta
-polzovatelyu. Lyubaya mutaciya sistemy trebuet verdikta `Expert` i `Critic`.
+polzovatelyu. Lyubaya mutaciya sistemy trebuet verdikta `Expert` и `Critic`.
 
-## Kak eto rabotaet
+## Как это работает
 
-1. **Dekompoziciya** - `Expert` razbivaet zadachu na atomarnye shagi s kriteriyami uspeha.
-2. **Ispolnenie** - `Executor` vypolnyaet shag cherez instrumenty.
-3. **Verifikaciya shaga** - `Expert` podtverzhdaet korrektnost i otsutstvie regressa.
-4. **Final + Critic** - `Expert` finalnaya proverka, zatem `Critic` (QA) po 4 frontam.
+1. **Декомпозиция** - `Expert` разбивает задачу на атомарные шаги с критериями успеха.
+2. **Исполнение** - `Executor` выполняет шаг через инструменты.
+3. **Верификация шага** - `Expert` подтверждает корректность и отсутствие регресса.
+4. **Финал + Critic** - `Expert` finalnaya proverka, zatem `Critic` (QA) po 4 frontam.
 
-## Struktura repozitoriya
+## Структура репозитория
 
 ```
 archai-free/
-+-- docs/                     # Protokoly i audit
++-- docs/                     # Протоколы и аудит
 |   +-- EXPERT_PROTOCOL.md
 |   +-- HERMES_MULTI_ROLE_PROTOCOL.md
 |   +-- AUDIT_2026-08-23.md
-+-- opencode/                 # Konfigi opencode
++-- opencode/                 # Конфиги opencode
 |   +-- agent/{critic,expert}.md
 |   +-- plugin/{expert_monitor.ts,expert_statusbar.tsx,memory.ts,statusbar.tsx}
 |   +-- opencode.json.example
-+-- hermes/                   # Konfigi Hermes
++-- hermes/                   # Конфиги Hermes
 |   +-- config.example.yaml
 |   +-- SOUL.md
 |   +-- plugins/{critic_hy3,role_monitor}/
@@ -60,19 +60,19 @@ archai-free/
 +-- README.md
 ```
 
-## Bystryy start
+## Быстрый старт
 
 ```bash
-# opencode-konfigi
+# opencode-конфиги
 cp -r opencode/ ~/.config/opencode/
 
-# Hermes-konfigi
+# Hermes-конфиги
 cp -r hermes/ ~/.hermes/
 ```
 
-Podrobnee - v [docs/EXPERT_PROTOCOL.md](docs/EXPERT_PROTOCOL.md) i
+Подробнее — в [docs/EXPERT_PROTOCOL.md](docs/EXPERT_PROTOCOL.md) i
 [docs/HERMES_MULTI_ROLE_PROTOCOL.md](docs/HERMES_MULTI_ROLE_PROTOCOL.md).
 
-## Licenziya
+## Лицензия
 
-[MIT](LICENSE) - svobodnoe ispolzovanie, rasprostranenie i modifikaciya.
+[MIT](LICENSE) - свободное использование, распространение и модификация.
